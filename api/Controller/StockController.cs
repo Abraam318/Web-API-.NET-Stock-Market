@@ -13,18 +13,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace api.Controllers // Corrected namespace to Controllers
+namespace api.Controllers 
 {
-    [Route("api/[controller]")] // Corrected route template
+    [Route("api/[controller]")] 
     [ApiController]
     public class StockController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IStockRepository _stockRepo;
         
-        public StockController(ApplicationDbContext context, IStockRepository stockRepo)
+        public StockController(IStockRepository stockRepo)
         {
-            _context = context;
             _stockRepo = stockRepo;
         }
 
