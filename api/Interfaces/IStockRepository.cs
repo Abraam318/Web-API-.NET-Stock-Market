@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Stocks;
 using api.Models;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
 namespace api.Interfaces
 {
@@ -14,5 +15,6 @@ namespace api.Interfaces
         Task<Stock> CreateAsync(Stock stockModel);
         Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto);
         Task<Stock?> DeleteAsync(int id);
+        Task<bool> StockExist(int id);
     }
 }
