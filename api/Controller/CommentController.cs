@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using api.Dtos;
 using api.Dtos.Comments;
@@ -48,6 +49,27 @@ namespace api.Controller
             var commentModel = commentDto.ToCommentFromCreate(stockId);
             await _commentRepo.CreateAsync(commentModel);
             return CreatedAtAction(nameof(GetById), new {id = commentModel.Id},commentModel.TocommentDto());
+        }
+
+        [HttpPut("{commentId}")]
+        public async Task<IActionResult> Update([FromRoute]int commentId,[FromBody] UpdateCommentRequestDto updateDto)
+        {
+            var comment = await _commentRepo.UpdateAsync(commentId, updateDto.ToCommentFromUpdateDto());
+            if(comment == null){
+                return NotFound("Comment not found");
+            }
+            return Ok(comment.TocommentDto());
+        }
+
+        [HttpDelete("{CommentId}")]
+        public async Task<IActionResult> Delete([FromRoute]int CommentId)
+        {
+            var commentModel = await _commentRepo.DeleteASync(CommentId);
+            if(commentModel==null)
+            {
+                NotFound("Comment not found");
+            }
+            return Ok(commentModel);
         }
     }
 }
