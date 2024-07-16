@@ -15,7 +15,7 @@ namespace api.Mapper
                 Title = commentModel.Title,
                 Content = commentModel.Content,
                 CreatedOn =commentModel.CreatedOn.Date,
-                StockId = commentModel.StockId
+                StockId = commentModel.StockId,
             };
         }
     }
