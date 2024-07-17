@@ -26,12 +26,13 @@ namespace api.Controller
 
         [HttpGet]
         public async Task<IActionResult> GetAll(){
+            
             var comment = await _commentRepo.GetAllCommentsAsync();
             var commentDto = comment.Select(s=>s.TocommentDto());
             return Ok(commentDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id){
             var comment = await _commentRepo.GetByIdASync(id);
             if(comment == null){
@@ -40,8 +41,14 @@ namespace api.Controller
             return Ok(comment.TocommentDto());
         }
 
-        [HttpPost("{stockId}")]
+        [HttpPost("{stockId:int}")]
         public async Task<IActionResult> Create([FromRoute]int stockId,[FromBody]CreateCommentDto commentDto){
+
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if(!await _stockRepo.StockExist(stockId)){
                 return BadRequest("Stock doesn't exist");
             }
@@ -51,9 +58,14 @@ namespace api.Controller
             return CreatedAtAction(nameof(GetById), new {id = commentModel.Id},commentModel.TocommentDto());
         }
 
-        [HttpPut("{commentId}")]
+        [HttpPut("{commentId:int}")]
         public async Task<IActionResult> Update([FromRoute]int commentId,[FromBody] UpdateCommentRequestDto updateDto)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var comment = await _commentRepo.UpdateAsync(commentId, updateDto.ToCommentFromUpdateDto());
             if(comment == null){
                 return NotFound("Comment not found");
@@ -61,9 +73,14 @@ namespace api.Controller
             return Ok(comment.TocommentDto());
         }
 
-        [HttpDelete("{CommentId}")]
+        [HttpDelete("{CommentId:int}")]
         public async Task<IActionResult> Delete([FromRoute]int CommentId)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             var commentModel = await _commentRepo.DeleteASync(CommentId);
             if(commentModel==null)
             {
